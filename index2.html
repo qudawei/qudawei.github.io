@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function openPostWindow(url, data, name) { //url要跳转到的页面，data要传递的数据，name显示方式（可能任意命名）
+            var tempForm = document.createElement("form");
+            tempForm.id = "tempForm1";
+            tempForm.method = "post";
+            tempForm.action = url;
+            tempForm.target = name;
+            var hideInput = document.createElement("input");
+            hideInput.type = "hidden";
+            hideInput.name = "dataname"
+            hideInput.value = data;
+            tempForm.appendChild(hideInput);
+            tempForm.attachEvent("onsubmit", function () {
+                openWindow(name);
+            }); //必须用name不能只用url，否则无法传值到新页面
+            document.body.appendChild(tempForm);
+            tempForm.fireEvent("onsubmit");
+            tempForm.submit();
+            document.body.removeChild(tempForm);
+        }
+
+
+        function openWindow(name) {
+            var iWidth = 1100; //弹出窗口的宽度;
+            var iHeight = 550; //弹出窗口的高度;
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; //获得窗口的水平位置;        
+            window.open('about:blank', name, "height=" + iHeight + ", width=" + iWidth + ", top=" + iTop + ", left=" +
+                iLeft + ",toolbar=no, menubar=no,  scrollbars=yes,resizable=yes,location=no, status=no");
+        }
+
+        function openGetWindow() {
+            window.open("http://127.0.0.1:5500/demo/index.html?vehicleId=" + 2);
+        }
+
+        function openPostWindow1(url, data1) {
+
+            var tempForm = document.createElement("form");
+            tempForm.id = "tempForm1";
+            tempForm.method = "post";
+            tempForm.action = url;
+            tempForm.target = "_blank"; //打开新页面
+            var hideInput1 = document.createElement("input");
+            hideInput1.type = "hidden";
+            hideInput1.name = "opid"; //后台要接受这个参数来取值
+            hideInput1.value = data1; //后台实际取到的值
+            /*var hideInput2 = document.createElement("input");
+            hideInput2.type = "hidden";
+            hideInput2.name="xtmc";
+            hideInput2.value = data2;
+            这里就是如果需要第二个参数的时候可以自己再设置*/
+            tempForm.appendChild(hideInput1);
+            //tempForm.appendChild(hideInput2);
+            if (document.all) {
+                tempForm.attachEvent("onsubmit", function () {}); //IE
+            } else {
+                var subObj = tempForm.addEventListener("submit", function () {}, false); //firefox
+            }
+            document.body.appendChild(tempForm);
+            if (document.all) {
+                tempForm.fireEvent("onsubmit");
+            } else {
+                tempForm.dispatchEvent(new Event("submit"));
+            }
+            tempForm.submit();
+            document.body.removeChild(tempForm);
+        }
+
+        function open(){
+            var arr = [1,2,3,4,5];
+            openPostWindow('http://127.0.0.1:5500/demo/index.html',arr,'jack')
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="open()">post</button>
+    <button onclick="openGetWindow()">get</button>
+    <form action="">
+
+    </form>
+</body>
+
+</html>
